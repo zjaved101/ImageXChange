@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
 
+// returns a hashed string
 async function hash(string) {
   try {
     const hashString = await new Promise(function(resolve, reject) {
-      bcrypt.hash(string, 10, function(err, hash) {
+      bcrypt.hash(string, parseInt(process.env.SALTROUNDS), function(err, hash) {
         if(err)
           reject(err);
         
@@ -18,6 +19,7 @@ async function hash(string) {
   }
 }
 
+// compares hashed string
 async function compare(string, hash) {
   try {
     const compareString = await new Promise(function(resolve, reject) {
