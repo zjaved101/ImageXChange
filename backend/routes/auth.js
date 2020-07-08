@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-// const bcrypt = require('bcrypt');
 const bcrypt = require('../lib/bcrypt');
 
 /* POST create user account */
 router.post('/signup', function(req, res, next) {  
   bcrypt.hash(req.body.password).then(function (string) {
+    // if hashes string returns empty
+    if(!string) {
+      console.log("Hash string is empty");
+      return res.sendStatus(500);
+    }
+
     db.query("INSERT INTO User(username,password,email) VALUES(?,?,?)", [req.body.username, string, req.body.email], function (err, results, fields) {
+      console.log(results);
       if(err && err['code'] === 'ER_DUP_ENTRY') {
         // Set http status code and return message for duplicate entry in DB
         res.status(400);
@@ -22,7 +28,7 @@ router.post('/signup', function(req, res, next) {
     res.send(failure);
   }).catch(function(err) {
     console.log("signup route hash -> ", err);
-    return res.send(500);
+    return res.sendStatus(500);
   });
 });
 
@@ -35,12 +41,8 @@ router.get('/signin', function(req, res, next) {
       return res.send(err);
     }
 
+    // If something was retrieved from the db query
     if(Array.isArray(results) && results.length) {
-      // return res.send("Found account. Successfully logged in!");
-
-      // console.log(results[0]);
-      // console.log(results[0].password);
-
       bcrypt.compare(req.body.password, results[0].password).then(function(valid) {
         console.log(valid);
         if(valid) 
@@ -54,7 +56,7 @@ router.get('/signin', function(req, res, next) {
         return res.send("Comparison failed");
       }).catch(function(err) {
         console.log("signin route compare -> ", err);
-        return res.send(500);
+        return res.sendStatus(500);
       });
     } else {
       res.status(400);
