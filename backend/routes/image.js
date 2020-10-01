@@ -4,7 +4,7 @@ const db = require('../config/db');
 
 /* POST upload image */
 router.post('/upload', function(req, res, next) {  
-    db.query("INSERT INTO Image(user_id,img_loc) VALUES(?,?)", [req.body.user_id, req.body.img_loc], function (err, results, fields) {
+    db.query("INSERT INTO Image(user_id,img_loc,price) VALUES(?,?,?)", [req.body.user_id, req.body.img_loc,req.body.price], function (err, results, fields) {
         console.log(results);
         if(err && err['code'] === 'ER_DUP_ENTRY') {
           // Set http status code and return message for duplicate entry in DB
