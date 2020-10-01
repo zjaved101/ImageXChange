@@ -4,7 +4,7 @@ const db = require('../config/db');
 const bcrypt = require('../lib/bcrypt');
 
 /* POST create user account */
-router.post('/signup', function(req, res, next) {  
+router.post('/signup', function(req, res, next) {
   bcrypt.hash(req.body.password).then(function (string) {
     // if hashes string returns empty
     if(!string) {
