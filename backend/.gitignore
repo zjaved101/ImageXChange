@@ -62,3 +62,6 @@ typings/
 
 # mysql table creation
 config/tables.txt
+
+# environment setup
+setup.sh
