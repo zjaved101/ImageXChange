@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db');
-const bcrypt = require('../lib/bcrypt');
+const db = require('../config/database');
+const bcrypt = require('../library/bcrypt');
 
 /* POST create user account */
 router.post('/signup', function(req, res, next) {
